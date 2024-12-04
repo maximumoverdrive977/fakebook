@@ -24,6 +24,7 @@
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            position: relative;
             transition: all 0.5s ease;
         }
 
@@ -89,14 +90,18 @@
 
         /* Insane Mode */
         .insane-mode {
-            animation: glitch 1s infinite linear;
+            animation: glitch 0.5s infinite linear;
             position: relative;
+            overflow: hidden;
         }
 
         @keyframes glitch {
-            0% { top: 0; left: 0; }
-            50% { top: 10px; left: 10px; opacity: 0.7; }
-            100% { top: 0; left: 0; }
+            0% { transform: translate(0px, 0px); opacity: 1; }
+            10% { transform: translate(-5px, 5px); opacity: 0.7; }
+            20% { transform: translate(5px, -5px); opacity: 0.6; }
+            30% { transform: translate(-10px, 10px); opacity: 0.5; }
+            50% { transform: translate(10px, -10px); opacity: 0.4; }
+            100% { transform: translate(0px, 0px); opacity: 1; }
         }
 
         /* Nightmare Mode */
@@ -130,6 +135,20 @@
             border-radius: 50%;
             background-color: rgba(255, 255, 255, 0.3);
         }
+
+        .difficulty-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .difficulty-buttons button {
+            background-color: #e74c3c;
+        }
+
+        .difficulty-buttons button:disabled {
+            background-color: #95a5a6;
+        }
     </style>
 </head>
 <body>
@@ -155,8 +174,10 @@
             <!-- Explanation will appear here -->
         </div>
 
-        <button onclick="toggleNightmareMode()">Nightmare Mode</button>
-        <button onclick="toggleInsaneMode()">Insane Mode</button>
+        <div class="difficulty-buttons">
+            <button id="nightmareModeButton" onclick="toggleNightmareMode()">Nightmare Mode</button>
+            <button id="insaneModeButton" onclick="toggleInsaneMode()">Insane Mode</button>
+        </div>
     </div>
 
     <script>
@@ -200,6 +221,7 @@
         let timerInterval;
         let isNightmareMode = false;
         let isInsaneMode = false;
+        let firstQuestionAnswered = false;
 
         function randomizeScenario() {
             const availableScenarios = scenarios.filter(scenario => scenario !== lastScenario);
@@ -218,51 +240,30 @@
                 document.getElementById('timer').style.display = 'block';
                 startTimer();
             }
+
+            if (!firstQuestionAnswered) {
+                document.getElementById('nightmareModeButton').style.display = 'inline-block';
+                document.getElementById('insaneModeButton').style.display = 'inline-block';
+            } else {
+                document.getElementById('nightmareModeButton').style.display = 'none';
+                document.getElementById('insaneModeButton').style.display = 'none';
+            }
         }
 
         function startTimer() {
             clearInterval(timerInterval);
-            timerValue = level >= 5 ? 10 : 30;
-            document.getElementById('timerValue').innerText = timerValue;
+            timerValue = level === 2 ? 30 : (level === 5 ? 10 : 30);
+            document.getElementById('timerValue').textContent = timerValue;
 
             timerInterval = setInterval(() => {
-                timerValue--;
-                document.getElementById('timerValue').innerText = timerValue;
-
                 if (timerValue <= 0) {
-                    alert("Time's up! You lose!");
-                    resetGame();
+                    clearInterval(timerInterval);
+                    loseGame("timeout");
+                } else {
+                    timerValue--;
+                    document.getElementById('timerValue').textContent = timerValue;
                 }
             }, 1000);
-        }
-
-        function showReportOptions() {
-            document.getElementById('reportOptions').style.display = 'block';
-            document.getElementById('submitReport').style.display = 'block';
-        }
-
-        function submitReport() {
-            const selectedOption = document.getElementById('reportOptions').value;
-            if (selectedOption === currentScenario.type) {
-                alert("Correct! You identified the scenario.");
-                correctScams++;
-                if (correctScams >= 3) {
-                    level++;
-                    correctScams = 0;
-                    alert(`Level up! Welcome to Level ${level}.`);
-                }
-                document.getElementById('level').innerText = `Level: ${level}`;
-                document.getElementById('score').innerText = `Scams Identified: ${correctScams}/3`;
-                randomizeScenario();
-            } else {
-                alert("Incorrect. Be careful!");
-                randomizeScenario();
-            }
-        }
-
-        function winLegitimate() {
-            alert("You successfully interacted with a legitimate page!");
-            randomizeScenario();
         }
 
         function loseGame(scamType) {
@@ -271,7 +272,8 @@
                 "fake-promo": "This was a fake promotion scam. Be cautious of offers that seem too good to be true.",
                 malware: "This was a malware scam. Only download files from trusted sources.",
                 "tech-support": "This was a tech support scam. Never give control of your computer to unverified callers.",
-                "fake-survey": "This was a fake survey scam. Avoid providing personal info for 'prizes.'"
+                "fake-survey": "This was a fake survey scam. Avoid providing personal info for 'prizes.'",
+                timeout: "You ran out of time! Be quicker next time!"
             };
             alert("You fell for the scam!");
             document.getElementById('explanation').innerHTML = explanations[scamType] || "Be careful next time!";
@@ -279,9 +281,15 @@
             resetGame();
         }
 
+        function winLegitimate() {
+            alert("You successfully interacted with a legitimate page!");
+            randomizeScenario();
+        }
+
         function resetGame() {
             level = 1;
             correctScams = 0;
+            firstQuestionAnswered = false;
             document.getElementById('level').innerText = "Level: 1";
             document.getElementById('score').innerText = "Scams Identified: 0/3";
             randomizeScenario();
