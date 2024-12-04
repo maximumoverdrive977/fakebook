@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fakebook Login</title>
+    <title>Scam Detector Game</title>
     <style>
         /* General reset */
         * {
@@ -13,8 +13,8 @@
         }
 
         body {
-            background-color: #f4f4f9; /* Slightly off color */
-            font-family: "Arial", sans-serif; /* Not the Facebook font */
+            background-color: #f4f4f9;
+            font-family: "Arial", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,127 +23,57 @@
             position: relative;
         }
 
-        /* Container for the login form */
-        .login-container {
+        .container {
             background-color: white;
-            width: 370px;
-            padding: 35px 40px;
+            width: 400px;
+            padding: 30px;
             border-radius: 8px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
-            border: 2px solid #f1f1f1; /* Overdone border */
         }
 
-        /* Fakebook logo with a small typo and off color */
         .logo {
             font-size: 36px;
             font-weight: bold;
-            color: #1877F2; /* Same color as Facebook, but it's not their logo */
+            color: #1877F2;
             margin-bottom: 18px;
         }
 
-        /* Header - awkward phrasing */
         h1 {
             font-size: 22px;
             color: #1c1e21;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
-        /* Input styles */
-        input[type="text"], input[type="password"] {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
+        #scamClues {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
             border-radius: 5px;
-            font-size: 16px;
+            color: #856404;
         }
 
-        /* Input field focus has the wrong color */
-        input[type="text"]:focus, input[type="password"]:focus {
-            border-color: #42b72a; /* Green instead of blue */
-            outline: none;
+        #scamClues h3 {
+            margin-bottom: 10px;
+            font-size: 18px;
         }
 
-        /* Submit button style with the wrong color */
         button {
-            width: 100%;
-            padding: 12px;
-            background-color: #3b5998; /* Facebook blue, but still suspicious */
+            padding: 10px;
+            background-color: #3b5998;
             color: white;
             border: none;
             border-radius: 5px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             transition: background-color 0.2s ease-in-out;
         }
 
-        /* Button hover color is too dark */
         button:hover {
             background-color: #334d84;
         }
 
-        /* Create new account link with wrong font size */
-        .create-account {
-            font-size: 13px; /* Way too small */
-            color: #1877F2;
-            text-decoration: none;
-            margin-top: 15px;
-            display: block;
-        }
-
-        .create-account:hover {
-            text-decoration: underline;
-        }
-
-        /* Phishing warning section with too much text */
-        .phishing-warning {
-            display: none;
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 20px;
-            font-size: 14px; /* Too small */
-        }
-
-        .phishing-info {
-            display: none;
-            background-color: #ffcc00;
-            color: black;
-            padding: 20px;
-            border-radius: 8px;
-            margin-top: 30px;
-            font-size: 16px;
-        }
-
-        .phishing-info h2 {
-            font-size: 18px; /* Small heading */
-            margin-bottom: 10px;
-        }
-
-        .phishing-info p {
-            margin: 10px 0;
-        }
-
-        /* Report button */
-        .report-button {
-            background-color: #f44336; /* Red color */
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.2s ease-in-out;
-        }
-
-        .report-button:hover {
-            background-color: #e53935;
-        }
-
-        /* Report dialog */
         #reportDialog {
             display: none;
             position: fixed;
@@ -191,64 +121,37 @@
             background-color: #777;
         }
 
-        /* Flag icon for report button */
-        .flag-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-            background-image: url('report flag.png'); /* Use your custom image */
-            background-size: cover;
-            display: inline-block;
-        }
-
-        /* Position the flag on top left */
         .report-container {
             position: absolute;
             top: 20px;
             left: 20px;
-            display: flex;
-            align-items: center;
             cursor: pointer;
         }
-
     </style>
 </head>
 <body>
-    <div class="report-container" onclick="showReportDialog()">
-        <div class="flag-icon"></div>
-        <span>Report Website</span>
+    <div class="report-container">
+        <button onclick="showReportDialog()">Report Website</button>
     </div>
 
-    <div class="login-container">
+    <div class="container">
         <div class="logo">Fakebook</div>
-        <h1>Log into Fakebook</h1>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Email or Phone" required><br>
-            <input type="password" id="password" placeholder="Password" required><br>
-            <button type="submit">Log In</button>
-        </form>
-        <a href="#" class="create-account">Create New Account</a>
-
-        <!-- Phishing Warning -->
-        <div id="phishingWarning" class="phishing-warning">
-            <strong>Warning:</strong> You're about to fall for a phishing attack! Your credentials haven't been logged or saved, but I would still recommend changing your password.
+        <h1>Scam Detector Game</h1>
+        <div id="scamClues">
+            <h3>Clues:</h3>
+            <p id="clues"></p>
         </div>
-        <div id="phishingInfo" class="phishing-info">
-            <h2>What is Phishing?</h2>
-            <p>Phishing is a type of cyber attack where attackers impersonate legitimate services or websites to trick you into providing sensitive information like usernames, passwords, or credit card numbers.</p>
-            <p>Always ensure that the website you are on is authentic by checking the URL carefully and looking for the padlock symbol in the browser's address bar. Don't be tricked into entering your information on suspicious sites!</p>
-        </div>
+        <button onclick="showReportDialog()">Guess the Scam</button>
     </div>
 
-    <!-- Report Dialog Box -->
     <div id="reportDialog">
         <h3>Report Website</h3>
-        <label for="reason">Why are you reporting this website?</label>
+        <label for="reason">What type of scam is this?</label>
         <select id="reason" required>
-            <option value="phishing">Phishing Attempt</option>
-            <option value="malware">Possible Malware</option>
-            <option value="fraud">Fraudulent Content</option>
-            <option value="other">Other</option>
+            <option value="Phishing">Phishing Attempt</option>
+            <option value="Malware">Possible Malware</option>
+            <option value="Fake Promotions">Fake Promotions</option>
+            <option value="Fraudulent Payment">Fraudulent Payment</option>
         </select>
         <textarea id="additionalInfo" placeholder="Additional information (optional)" rows="4"></textarea>
         <button onclick="submitReport()">Submit Report</button>
@@ -256,35 +159,58 @@
     </div>
 
     <script>
-        // Show report dialog
+        const scamTypes = [
+            {
+                type: "Phishing",
+                clues: "Login page with mismatched branding, awkward phrasing, and non-secure elements.",
+                explanation: "Phishing attempts mimic legitimate websites to steal your credentials."
+            },
+            {
+                type: "Malware",
+                clues: "Download prompts or scripts embedded in suspicious-looking buttons.",
+                explanation: "Malware scams involve tricking users into downloading harmful software."
+            },
+            {
+                type: "Fake Promotions",
+                clues: "Offers free giveaways or deals that sound too good to be true.",
+                explanation: "Scammers use fake promotions to lure victims into providing sensitive information."
+            },
+            {
+                type: "Fraudulent Payment",
+                clues: "Requests payments via unusual methods like gift cards or crypto.",
+                explanation: "Fraudulent payment scams often ask for untraceable payment methods."
+            }
+        ];
+
+        let currentScam;
+
+        function randomizeScam() {
+            currentScam = scamTypes[Math.floor(Math.random() * scamTypes.length)];
+            document.getElementById('clues').textContent = currentScam.clues;
+        }
+
         function showReportDialog() {
             document.getElementById('reportDialog').style.display = 'block';
         }
 
-        // Close report dialog
         function closeReportDialog() {
             document.getElementById('reportDialog').style.display = 'none';
         }
 
-        // Handle report submission
         function submitReport() {
-            const reason = document.getElementById('reason').value;
-            const additionalInfo = document.getElementById('additionalInfo').value;
-            alert('Thank you for reporting. Reason: ' + reason + '\n' + (additionalInfo ? 'Additional Info: ' + additionalInfo : ''));
-            closeReportDialog();  // Close the dialog after submission
+            const userGuess = document.getElementById('reason').value;
+            let message;
+            if (userGuess === currentScam.type) {
+                message = `Correct! This is a ${currentScam.type} scam. ${currentScam.explanation}`;
+            } else {
+                message = `Incorrect. This is a ${currentScam.type} scam. ${currentScam.explanation}`;
+            }
+            alert(message);
+            randomizeScam(); // Reset game after report
+            closeReportDialog();
         }
 
-        // Update phishing warning and info on form submission
-        document.getElementById("loginForm").addEventListener("submit", function(event) {
-            event.preventDefault();
-            
-            // Show phishing warning and info
-            document.getElementById("phishingWarning").style.display = "block";
-            document.getElementById("phishingInfo").style.display = "block";
-
-            // Hide the login form
-            document.getElementById("loginForm").style.display = "none";
-        });
+        document.addEventListener('DOMContentLoaded', randomizeScam);
     </script>
 </body>
 </html>
