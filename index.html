@@ -207,19 +207,25 @@
             { type: 'fraud', message: 'This website is displaying fake promotions, claiming you won a prize!' }
         ];
 
-        // Randomly select scam type to simulate
-        const currentScam = scams[Math.floor(Math.random() * scams.length)];
+        // Check if a scam has been shown in this session
+        const scamShown = localStorage.getItem('scamShown');
 
-        // Simulate different scams
-        if (currentScam.type === 'fraud') {
-            // Show suspicious ad
-            document.getElementById('adBanner').style.display = 'block';
-        } else if (currentScam.type === 'malware') {
-            // Show malware download link
-            document.getElementById('malwareLink').style.display = 'block';
-        } else if (currentScam.type === 'phishing') {
-            // Show fake login form
-            document.querySelector('.login-container').style.display = 'block';
+        // If no scam has been shown, randomly select one and store it in localStorage
+        if (!scamShown) {
+            const currentScam = scams[Math.floor(Math.random() * scams.length)];
+            localStorage.setItem('scamShown', currentScam.type); // Save scam type for this session
+
+            // Simulate different scams based on the randomly selected scam
+            if (currentScam.type === 'fraud') {
+                // Show suspicious ad
+                document.getElementById('adBanner').style.display = 'block';
+            } else if (currentScam.type === 'malware') {
+                // Show malware download link
+                document.getElementById('malwareLink').style.display = 'block';
+            } else if (currentScam.type === 'phishing') {
+                // Show fake login form
+                document.querySelector('.login-container').style.display = 'block';
+            }
         }
 
         // Handle click on suspicious ad
@@ -245,12 +251,13 @@
         // Handle report submission
         function submitReport() {
             const reason = document.getElementById('reason').value;
+            const scamShown = localStorage.getItem('scamShown');
             let feedback = '';
 
-            if (reason === currentScam.type) {
+            if (reason === scamShown) {
                 feedback = 'Correct! You identified this scam correctly.';
             } else {
-                feedback = 'Incorrect! This was a ' + currentScam.type + ' scam.';
+                feedback = 'Incorrect! This was a ' + scamShown + ' scam.';
             }
 
             alert(feedback);
