@@ -228,13 +228,40 @@
                     </form>
                 `,
                 difficulty: 4
+            },
+            // New scam login pages
+            {
+                type: "phishing",
+                content: `
+                    <h2>Phishing Scam: Fake Gmail Login</h2>
+                    <p>Your Gmail account has been locked for security reasons. Please login below to regain access.</p>
+                    <form onsubmit="loseGame('phishing'); return false;">
+                        <input type="text" placeholder="Email Address" required>
+                        <input type="password" placeholder="Password" required>
+                        <button type="submit">Log In</button>
+                    </form>
+                `,
+                difficulty: 5
+            },
+            {
+                type: "phishing",
+                content: `
+                    <h2>Fake Social Media Login</h2>
+                    <p>We noticed suspicious activity in your account. Please verify your credentials below.</p>
+                    <form onsubmit="loseGame('phishing'); return false;">
+                        <input type="text" placeholder="Username" required>
+                        <input type="password" placeholder="Password" required>
+                        <button type="submit">Verify</button>
+                    </form>
+                `,
+                difficulty: 5
             }
         ];
 
-        let currentScenario;
-        let lastScenario = null;
         let level = 1;
         let correctScams = 0;
+        let currentScenario;
+        let lastScenario;
         let timerValue = 30;
         let timerInterval;
 
