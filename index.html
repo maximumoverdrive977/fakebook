@@ -20,6 +20,7 @@
             align-items: center;
             height: 100vh;
             color: #2c2f33;
+            position: relative;
         }
 
         /* Container for the login form */
@@ -190,9 +191,34 @@
             background-color: #777;
         }
 
+        /* Flag icon for report button */
+        .flag-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Icon_Flag.svg/1024px-Icon_Flag.svg.png');
+            background-size: cover;
+            display: inline-block;
+        }
+
+        /* Position the flag on top left */
+        .report-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
+    <div class="report-container" onclick="showReportDialog()">
+        <div class="flag-icon"></div>
+        <span>Report Website</span>
+    </div>
+
     <div class="login-container">
         <div class="logo">Fakebook</div>
         <h1>Log into Fakebook</h1>
@@ -203,11 +229,9 @@
         </form>
         <a href="#" class="create-account">Create New Account</a>
 
-        <!-- Report Website Button -->
-        <button class="report-button" onclick="showReportDialog()">Report Website</button>
-
+        <!-- Phishing Warning -->
         <div id="phishingWarning" class="phishing-warning">
-            <strong>Warning:</strong> You're about to fall for a phishing attack!
+            <strong>Warning:</strong> You're about to fall for a phishing attack! Your credentials haven't been logged or saved, but I would still recommend changing your password.
         </div>
         <div id="phishingInfo" class="phishing-info">
             <h2>What is Phishing?</h2>
