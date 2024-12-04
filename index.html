@@ -76,6 +76,13 @@
             border-radius: 8px;
             color: #b00;
         }
+
+        .timer {
+            font-size: 18px;
+            font-weight: bold;
+            color: red;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -83,6 +90,7 @@
         <h1>Scam Detector</h1>
         <div id="level" class="level">Level: 1</div>
         <div id="score" class="level">Scams Identified: 0/3</div>
+        <div id="timer" class="timer" style="display: none;">Time Left: <span id="timerValue">30</span>s</div>
         <div id="scenario" class="scenario">
             <!-- Random scenario will be inserted here -->
         </div>
@@ -224,16 +232,44 @@
         ];
 
         let currentScenario;
+        let lastScenario = null;
         let level = 1;
         let correctScams = 0;
+        let timerValue = 30;
+        let timerInterval;
 
         function randomizeScenario() {
-            const levelScenarios = scenarios.filter(scenario => scenario.difficulty <= level);
-            currentScenario = levelScenarios[Math.floor(Math.random() * levelScenarios.length)];
+            const availableScenarios = scenarios.filter(scenario => scenario !== lastScenario);
+            currentScenario = availableScenarios[Math.floor(Math.random() * availableScenarios.length)];
+            lastScenario = currentScenario;
+
             document.getElementById('scenario').innerHTML = currentScenario.content;
             document.getElementById('reportOptions').style.display = 'none';
             document.getElementById('submitReport').style.display = 'none';
             document.getElementById('explanation').style.display = 'none';
+
+            if (currentScenario.type === "none" && currentScenario.content.includes("Login")) {
+                document.getElementById('timer').style.display = 'none'; // No timer on login pages
+            } else {
+                document.getElementById('timer').style.display = 'block';
+                startTimer();
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerValue = level >= 5 ? 10 : 30;
+            document.getElementById('timerValue').innerText = timerValue;
+
+            timerInterval = setInterval(() => {
+                timerValue--;
+                document.getElementById('timerValue').innerText = timerValue;
+
+                if (timerValue <= 0) {
+                    alert("Time's up! You lose!");
+                    resetGame();
+                }
+            }, 1000);
         }
 
         function showReportOptions() {
@@ -253,13 +289,11 @@
                 }
                 document.getElementById('level').innerText = `Level: ${level}`;
                 document.getElementById('score').innerText = `Scams Identified: ${correctScams}/3`;
-            } else if (currentScenario.type === "none") {
-                alert("This wasn't a scam. You lose!");
-                resetGame();
+                randomizeScenario();
             } else {
                 alert("Incorrect. Be careful!");
+                randomizeScenario();
             }
-            randomizeScenario();
         }
 
         function winLegitimate() {
@@ -278,6 +312,7 @@
             alert("You fell for the scam!");
             document.getElementById('explanation').innerHTML = explanations[scamType] || "Be careful next time!";
             document.getElementById('explanation').style.display = 'block';
+            resetGame();
         }
 
         function resetGame() {
