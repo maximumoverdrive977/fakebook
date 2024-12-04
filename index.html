@@ -28,7 +28,13 @@
         h1 {
             font-size: 24px;
             color: #333;
+            margin-bottom: 10px;
+        }
+
+        .level {
             margin-bottom: 20px;
+            font-weight: bold;
+            color: #555;
         }
 
         .scenario {
@@ -75,6 +81,7 @@
 <body>
     <div class="container">
         <h1>Scam Detector</h1>
+        <div id="level" class="level">Level: 1</div>
         <div id="scenario" class="scenario">
             <!-- Random scenario will be inserted here -->
         </div>
@@ -93,99 +100,109 @@
     </div>
 
     <script>
-        // Scam and legitimate scenarios
         const scenarios = [
+            // Level 1: Easy
             {
                 type: "phishing",
                 content: `
-                    <h2>Login to Your Bank Account</h2>
-                    <p>Please enter your credentials to verify your identity.</p>
-                    <form onsubmit="loseGame('phishing'); return false;">
-                        <input type="text" placeholder="Username" style="display: block; margin-bottom: 10px; padding: 5px;">
-                        <input type="password" placeholder="Password" style="display: block; margin-bottom: 10px; padding: 5px;">
-                        <button style="padding: 5px;">Submit</button>
-                    </form>
-                `
+                    <h2>Verify Your Email Account</h2>
+                    <p>Your account will be disabled if you don't verify within 24 hours.</p>
+                    <a href="#" onclick="loseGame('phishing');" style="color: red;">Click here to verify</a>
+                `,
+                difficulty: 1
             },
+            {
+                type: "none",
+                content: `
+                    <h2>Welcome to Our Recipe Blog</h2>
+                    <p>Explore delicious recipes and tips for cooking!</p>
+                    <a href="#" style="color: #1877F2;">Read More</a>
+                `,
+                difficulty: 1
+            },
+            // Level 2: Medium
             {
                 type: "fake-promo",
                 content: `
-                    <h2>Congratulations! You've Won an iPhone!</h2>
-                    <p>Click the button below to claim your prize.</p>
-                    <button onclick="loseGame('fake-promo');" style="padding: 10px; background-color: gold; color: black;">Claim Now</button>
-                `
+                    <h2>Special Offer: 50% Off Your Favorite Shoes!</h2>
+                    <p>Click the link below to redeem your offer.</p>
+                    <a href="#" onclick="loseGame('fake-promo');" style="color: blue;">Redeem Now</a>
+                `,
+                difficulty: 2
             },
             {
                 type: "malware",
                 content: `
-                    <h2>Urgent: Your Computer is Infected!</h2>
-                    <p>Click the button below to download the antivirus tool.</p>
-                    <button onclick="loseGame('malware');" style="padding: 10px; background-color: red; color: white;">Download Now</button>
-                `
+                    <h2>Important Security Update!</h2>
+                    <p>Your device is at risk. Download the patch now.</p>
+                    <button onclick="loseGame('malware');" style="padding: 10px; background-color: red; color: white;">Download</button>
+                `,
+                difficulty: 2
+            },
+            // Level 3: Hard
+            {
+                type: "phishing",
+                content: `
+                    <h2>PayPal: Unusual Login Attempt</h2>
+                    <p>We detected an unusual login attempt. Please confirm your identity to secure your account.</p>
+                    <a href="#" onclick="loseGame('phishing');" style="color: red;">Log In to Confirm</a>
+                `,
+                difficulty: 3
             },
             {
                 type: "none",
                 content: `
-                    <h2>Welcome to Our Blog</h2>
-                    <p>Explore our latest posts about technology and design.</p>
-                    <a href="#" style="color: #1877F2;">Read More</a>
-                `
-            },
-            {
-                type: "none",
-                content: `
-                    <h2>Subscribe to Our Newsletter</h2>
-                    <p>Enter your email to receive updates.</p>
+                    <h2>Join Our Webinar</h2>
+                    <p>Sign up for our free webinar on cybersecurity best practices.</p>
                     <form>
-                        <input type="email" placeholder="Enter your email" style="padding: 5px;">
-                        <button style="padding: 5px;">Subscribe</button>
+                        <input type="text" placeholder="Enter your name" style="margin-bottom: 10px; padding: 5px;">
+                        <button style="padding: 5px;">Register</button>
                     </form>
-                `
+                `,
+                difficulty: 3
             }
         ];
 
         let currentScenario;
+        let level = 1;
 
-        // Randomize scenario
         function randomizeScenario() {
-            currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            const levelScenarios = scenarios.filter(scenario => scenario.difficulty === level);
+            currentScenario = levelScenarios[Math.floor(Math.random() * levelScenarios.length)];
             document.getElementById('scenario').innerHTML = currentScenario.content;
             document.getElementById('reportOptions').style.display = 'none';
             document.getElementById('submitReport').style.display = 'none';
             document.getElementById('explanation').style.display = 'none';
         }
 
-        // Show report options
         function showReportOptions() {
             document.getElementById('reportOptions').style.display = 'block';
             document.getElementById('submitReport').style.display = 'block';
         }
 
-        // Submit report
         function submitReport() {
             const selectedOption = document.getElementById('reportOptions').value;
             if (selectedOption === currentScenario.type) {
                 alert("Correct! You identified the scam.");
+                level = Math.min(level + 1, 3); // Cap the level at 3
+                document.getElementById('level').innerText = `Level: ${level}`;
             } else {
                 alert("Incorrect. Try again.");
             }
             randomizeScenario();
         }
 
-        // Lose the game
         function loseGame(scamType) {
-            const explanation = {
-                phishing: "This was a phishing scam. Never enter your credentials on suspicious pages. Always check the URL and ensure it's secure.",
-                "fake-promo": "This was a fake promotion scam. Be wary of offers that seem too good to be true, especially if they ask for personal information.",
-                malware: "This was a malware scam. Avoid clicking on suspicious download links or buttons. Use trusted antivirus software.",
+            const explanations = {
+                phishing: "This was a phishing scam. Always check the sender's address and avoid clicking links in suspicious emails.",
+                "fake-promo": "This was a fake promotion scam. Be cautious of offers that seem too good to be true.",
+                malware: "This was a malware scam. Only download files from trusted sources.",
             };
-
             alert("You fell for the scam!");
-            document.getElementById('explanation').innerHTML = explanation[scamType] || "Be careful next time!";
+            document.getElementById('explanation').innerHTML = explanations[scamType] || "Be careful next time!";
             document.getElementById('explanation').style.display = 'block';
         }
 
-        // Initialize game
         document.addEventListener('DOMContentLoaded', randomizeScenario);
     </script>
 </body>
