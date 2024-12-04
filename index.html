@@ -92,6 +92,8 @@
             <option value="phishing">Phishing</option>
             <option value="fake-promo">Fake Promotion</option>
             <option value="malware">Malware</option>
+            <option value="tech-support">Tech Support Scam</option>
+            <option value="fake-survey">Fake Survey</option>
         </select>
         <button id="submitReport" style="display: none;" onclick="submitReport()">Submit Report</button>
         <div id="explanation" class="explanation" style="display: none;">
@@ -108,6 +110,15 @@
                     <h2>Verify Your Email Account</h2>
                     <p>Your account will be disabled if you don't verify within 24 hours.</p>
                     <a href="#" onclick="loseGame('phishing');" style="color: red;">Click here to verify</a>
+                `,
+                difficulty: 1
+            },
+            {
+                type: "fake-survey",
+                content: `
+                    <h2>Complete the Survey to Win a Prize!</h2>
+                    <p>Answer a few questions to claim your $100 gift card.</p>
+                    <a href="#" onclick="loseGame('fake-survey');" style="color: blue;">Take the Survey</a>
                 `,
                 difficulty: 1
             },
@@ -131,6 +142,15 @@
                 difficulty: 2
             },
             {
+                type: "malware",
+                content: `
+                    <h2>Your Computer is Infected!</h2>
+                    <p>Click below to download our free antivirus software and protect your PC.</p>
+                    <a href="#" onclick="loseGame('malware');" style="color: red;">Download Now</a>
+                `,
+                difficulty: 2
+            },
+            {
                 type: "none",
                 content: `
                     <h2>Login to Secure Service</h2>
@@ -143,6 +163,15 @@
                 difficulty: 2
             },
             // Level 3: Hard
+            {
+                type: "tech-support",
+                content: `
+                    <h2>Urgent: Your Computer Needs Immediate Attention</h2>
+                    <p>Our system detected an issue. Please contact support immediately.</p>
+                    <a href="#" onclick="loseGame('tech-support');" style="color: red;">Contact Support</a>
+                `,
+                difficulty: 3
+            },
             {
                 type: "phishing",
                 content: `
@@ -160,6 +189,37 @@
                     <a href="#" onclick="winLegitimate();" style="color: green;">Accept Invitation</a>
                 `,
                 difficulty: 3
+            },
+            // Level 4: Expert
+            {
+                type: "fake-promo",
+                content: `
+                    <h2>Exclusive 70% Discount on Electronics Today Only!</h2>
+                    <p>Click below to grab the deal before it's too late!</p>
+                    <a href="#" onclick="loseGame('fake-promo');" style="color: blue;">Grab the Deal</a>
+                `,
+                difficulty: 4
+            },
+            {
+                type: "malware",
+                content: `
+                    <h2>Your Software is Out of Date!</h2>
+                    <p>Click here to update your system and avoid future problems.</p>
+                    <a href="#" onclick="loseGame('malware');" style="color: red;">Update Now</a>
+                `,
+                difficulty: 4
+            },
+            {
+                type: "none",
+                content: `
+                    <h2>Login to Your Bank Account</h2>
+                    <form onsubmit="winLegitimate(); return false;">
+                        <input type="text" placeholder="Bank ID" required style="display: block; margin-bottom: 10px;">
+                        <input type="password" placeholder="PIN" required style="display: block; margin-bottom: 10px;">
+                        <button type="submit">Login</button>
+                    </form>
+                `,
+                difficulty: 4
             }
         ];
 
@@ -212,6 +272,8 @@
                 phishing: "This was a phishing scam. Always check the sender's address and avoid clicking links in suspicious emails.",
                 "fake-promo": "This was a fake promotion scam. Be cautious of offers that seem too good to be true.",
                 malware: "This was a malware scam. Only download files from trusted sources.",
+                "tech-support": "This was a tech support scam. Never give control of your computer to unverified callers.",
+                "fake-survey": "This was a fake survey scam. Avoid providing personal info for 'prizes.'"
             };
             alert("You fell for the scam!");
             document.getElementById('explanation').innerHTML = explanations[scamType] || "Be careful next time!";
