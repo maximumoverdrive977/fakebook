@@ -11,62 +11,64 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            background-color: #e9eff1;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            background-color: #f4f4f9; /* Slightly off color */
+            font-family: "Arial", sans-serif; /* Not the Facebook font */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: #1c1e21;
+            color: #2c2f33;
         }
 
         /* Container for the login form */
         .login-container {
             background-color: white;
-            width: 350px;
-            padding: 40px 35px;
+            width: 370px;
+            padding: 35px 40px;
             border-radius: 8px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
+            border: 2px solid #f1f1f1; /* Overdone border */
         }
 
-        /* Fakebook logo */
+        /* Fakebook logo with a small typo and off color */
         .logo {
-            font-size: 35px;
+            font-size: 36px;
             font-weight: bold;
-            color: #1877f2;
-            margin-bottom: 20px;
+            color: #1877F2; /* Same color as Facebook, but it's not their logo */
+            margin-bottom: 18px;
         }
 
-        /* Header */
+        /* Header - awkward phrasing */
         h1 {
             font-size: 22px;
             color: #1c1e21;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         /* Input styles */
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 12px;
-            margin: 8px 0;
+            margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 5px;
             font-size: 16px;
         }
 
+        /* Input field focus has the wrong color */
         input[type="text"]:focus, input[type="password"]:focus {
-            border-color: #1877f2;
+            border-color: #42b72a; /* Green instead of blue */
             outline: none;
         }
 
-        /* Submit button */
+        /* Submit button style with the wrong color */
         button {
             width: 100%;
             padding: 12px;
-            background-color: #42b72a;
+            background-color: #3b5998; /* Facebook blue, but still suspicious */
             color: white;
             border: none;
             border-radius: 5px;
@@ -75,14 +77,15 @@
             transition: background-color 0.2s ease-in-out;
         }
 
+        /* Button hover color is too dark */
         button:hover {
-            background-color: #36a420;
+            background-color: #334d84;
         }
 
-        /* Create new account link */
+        /* Create new account link with wrong font size */
         .create-account {
-            font-size: 14px;
-            color: #1877f2;
+            font-size: 13px; /* Way too small */
+            color: #1877F2;
             text-decoration: none;
             margin-top: 15px;
             display: block;
@@ -92,7 +95,7 @@
             text-decoration: underline;
         }
 
-        /* Warning and phishing info section */
+        /* Phishing warning section with too much text */
         .phishing-warning {
             display: none;
             background-color: #f8d7da;
@@ -100,7 +103,7 @@
             padding: 15px;
             border-radius: 5px;
             margin-top: 20px;
-            font-size: 16px;
+            font-size: 14px; /* Too small */
         }
 
         .phishing-info {
@@ -114,13 +117,34 @@
         }
 
         .phishing-info h2 {
-            font-size: 20px;
+            font-size: 18px; /* Small heading */
             margin-bottom: 10px;
         }
 
         .phishing-info p {
             margin: 10px 0;
         }
+
+        /* Live count section */
+        .live-count {
+            font-size: 12px;
+            color: #333;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        /* Defective link */
+        .defective-link {
+            color: red;
+            font-size: 14px;
+            margin-top: 20px;
+            text-decoration: none;
+        }
+
+        .defective-link:hover {
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
@@ -133,6 +157,10 @@
             <button type="submit">Log In</button>
         </form>
         <a href="#" class="create-account">Create New Account</a>
+
+        <!-- Minor broken link for additional effect -->
+        <a href="http://fakbook.com" class="defective-link">Help us fix this error by clicking here!</a>
+
         <div id="phishingWarning" class="phishing-warning">
             <strong>Warning:</strong> You're about to fall for a phishing attack!
         </div>
@@ -141,19 +169,42 @@
             <p>Phishing is a type of cyber attack where attackers impersonate legitimate services or websites to trick you into providing sensitive information like usernames, passwords, or credit card numbers.</p>
             <p>Always ensure that the website you are on is authentic by checking the URL carefully and looking for the padlock symbol in the browser's address bar. Don't be tricked into entering your information on suspicious sites!</p>
         </div>
+
+        <!-- Fake live count section -->
+        <div id="liveCount" class="live-count"></div>
     </div>
 
     <script>
+        // Function to update the live count (simulated)
+        function updateLiveCount() {
+            let count = localStorage.getItem("phishingCount");
+            count = count ? parseInt(count) : 0;
+            document.getElementById("liveCount").innerHTML = `Live Count: ${count} people have entered their credentials.`;
+        }
+
+        // Update the count when the form is submitted
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault();
             
-            // Show phishing warning and information
+            // Increment the count in localStorage
+            let count = localStorage.getItem("phishingCount");
+            count = count ? parseInt(count) : 0;
+            count++;
+            localStorage.setItem("phishingCount", count);
+
+            // Show phishing warning and info
             document.getElementById("phishingWarning").style.display = "block";
             document.getElementById("phishingInfo").style.display = "block";
-            
+
             // Hide the login form
             document.getElementById("loginForm").style.display = "none";
+            
+            // Update the live count on the page
+            updateLiveCount();
         });
+
+        // Initialize live count on page load
+        window.onload = updateLiveCount;
     </script>
 </body>
 </html>
