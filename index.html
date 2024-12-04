@@ -5,70 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fakebook Login</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f3f5;
+        /* General reset */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #e9eff1;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #1c1e21;
         }
+
+        /* Container for the login form */
         .login-container {
             background-color: white;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 350px;
+            padding: 40px 35px;
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
+
+        /* Fakebook logo */
         .logo {
-            font-size: 40px;
+            font-size: 35px;
             font-weight: bold;
-            color: #1877F2;
+            color: #1877f2;
             margin-bottom: 20px;
         }
+
+        /* Header */
         h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #333;
+            font-size: 22px;
+            color: #1c1e21;
+            margin-bottom: 20px;
         }
+
+        /* Input styles */
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 12px;
             margin: 8px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 16px;
         }
+
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #1877f2;
+            outline: none;
+        }
+
+        /* Submit button */
         button {
             width: 100%;
             padding: 12px;
-            background-color: #4CAF50;
+            background-color: #42b72a;
             color: white;
             border: none;
-            border-radius: 4px;
-            font-size: 16px;
+            border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
         }
+
         button:hover {
-            background-color: #45a049;
+            background-color: #36a420;
         }
-        .error-message, .phishing-warning {
-            color: red;
-            font-size: 16px;
-            margin-top: 20px;
+
+        /* Create new account link */
+        .create-account {
+            font-size: 14px;
+            color: #1877f2;
+            text-decoration: none;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .create-account:hover {
+            text-decoration: underline;
+        }
+
+        /* Warning and phishing info section */
+        .phishing-warning {
             display: none;
-        }
-        .phishing-info {
-            background-color: #ffcc00;
+            background-color: #f8d7da;
+            color: #721c24;
             padding: 15px;
             border-radius: 5px;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .phishing-info {
+            display: none;
+            background-color: #ffcc00;
             color: black;
+            padding: 20px;
+            border-radius: 8px;
             margin-top: 30px;
             font-size: 16px;
-            display: none;
         }
+
+        .phishing-info h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
         .phishing-info p {
             margin: 10px 0;
         }
@@ -83,14 +132,14 @@
             <input type="password" id="password" placeholder="Password" required><br>
             <button type="submit">Log In</button>
         </form>
-        <div id="errorMessage" class="error-message">Invalid credentials! Please don't fall for phishing.</div>
+        <a href="#" class="create-account">Create New Account</a>
         <div id="phishingWarning" class="phishing-warning">
             <strong>Warning:</strong> You're about to fall for a phishing attack!
         </div>
         <div id="phishingInfo" class="phishing-info">
             <h2>What is Phishing?</h2>
-            <p>Phishing is a type of cyber attack where an attacker pretends to be a trustworthy entity (such as a website or service) in order to trick you into giving up sensitive information like usernames, passwords, or credit card details.</p>
-            <p>It is important to always verify that the website you are on is legitimate and trustworthy before entering any sensitive information. Look for the padlock icon in the browser's address bar, and check the URL carefully to ensure you are on the correct site.</p>
+            <p>Phishing is a type of cyber attack where attackers impersonate legitimate services or websites to trick you into providing sensitive information like usernames, passwords, or credit card numbers.</p>
+            <p>Always ensure that the website you are on is authentic by checking the URL carefully and looking for the padlock symbol in the browser's address bar. Don't be tricked into entering your information on suspicious sites!</p>
         </div>
     </div>
 
@@ -98,16 +147,12 @@
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault();
             
-            // Show phishing warning and information about phishing
+            // Show phishing warning and information
             document.getElementById("phishingWarning").style.display = "block";
             document.getElementById("phishingInfo").style.display = "block";
             
             // Hide the login form
             document.getElementById("loginForm").style.display = "none";
-            
-            // Optionally, you can log the credentials for demonstration purposes (but don't actually do this in a real phishing scenario)
-            console.log("Username: " + document.getElementById("username").value);
-            console.log("Password: " + document.getElementById("password").value);
         });
     </script>
 </body>
