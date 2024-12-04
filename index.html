@@ -5,212 +5,151 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scam Detector Game</title>
     <style>
-        /* General reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
+            font-family: Arial, sans-serif;
             background-color: #f4f4f9;
-            font-family: "Arial", sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: #2c2f33;
-            position: relative;
+            margin: 0;
+            padding: 0;
         }
 
         .container {
             background-color: white;
             width: 400px;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
-        .logo {
-            font-size: 36px;
-            font-weight: bold;
-            color: #1877F2;
-            margin-bottom: 18px;
-        }
-
         h1 {
-            font-size: 22px;
-            color: #1c1e21;
+            font-size: 24px;
+            color: #333;
             margin-bottom: 20px;
         }
 
-        #scamClues {
-            margin: 20px 0;
+        .scenario {
+            margin-bottom: 20px;
             padding: 15px;
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            border-radius: 5px;
-            color: #856404;
-        }
-
-        #scamClues h3 {
-            margin-bottom: 10px;
-            font-size: 18px;
+            background-color: #eef2ff;
+            border-radius: 8px;
+            color: #333;
         }
 
         button {
-            padding: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
             background-color: #3b5998;
             color: white;
             border: none;
             border-radius: 5px;
-            font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.2s ease-in-out;
+            transition: background-color 0.2s;
         }
 
         button:hover {
             background-color: #334d84;
         }
-
-        #reportDialog {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-            width: 300px;
-        }
-
-        #reportDialog select, #reportDialog textarea {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 14px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-
-        #reportDialog button {
-            background-color: #42b72a;
-            color: white;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            border: none;
-        }
-
-        #reportDialog button:hover {
-            background-color: #36a420;
-        }
-
-        #reportDialog .close-button {
-            background-color: #999;
-            margin-top: 5px;
-            width: 100%;
-        }
-
-        #reportDialog .close-button:hover {
-            background-color: #777;
-        }
-
-        .report-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
-    <div class="report-container">
-        <button onclick="showReportDialog()">Report Website</button>
-    </div>
-
     <div class="container">
-        <div class="logo">Fakebook</div>
-        <h1>Scam Detector Game</h1>
-        <div id="scamClues">
-            <h3>Clues:</h3>
-            <p id="clues"></p>
+        <h1>Scam Detector</h1>
+        <div id="scenario" class="scenario">
+            <!-- Random scenario will be inserted here -->
         </div>
-        <button onclick="showReportDialog()">Guess the Scam</button>
-    </div>
-
-    <div id="reportDialog">
-        <h3>Report Website</h3>
-        <label for="reason">What type of scam is this?</label>
-        <select id="reason" required>
-            <option value="Phishing">Phishing Attempt</option>
-            <option value="Malware">Possible Malware</option>
-            <option value="Fake Promotions">Fake Promotions</option>
-            <option value="Fraudulent Payment">Fraudulent Payment</option>
-        </select>
-        <textarea id="additionalInfo" placeholder="Additional information (optional)" rows="4"></textarea>
-        <button onclick="submitReport()">Submit Report</button>
-        <button class="close-button" onclick="closeReportDialog()">Close</button>
+        <button id="reportButton" onclick="reportScenario()">Report This</button>
+        <button id="interactButton" onclick="interactWithScenario()">Interact</button>
     </div>
 
     <script>
-        const scamTypes = [
+        // Scam and legitimate scenarios
+        const scenarios = [
             {
                 type: "Phishing",
-                clues: "Login page with mismatched branding, awkward phrasing, and non-secure elements.",
-                explanation: "Phishing attempts mimic legitimate websites to steal your credentials."
-            },
-            {
-                type: "Malware",
-                clues: "Download prompts or scripts embedded in suspicious-looking buttons.",
-                explanation: "Malware scams involve tricking users into downloading harmful software."
+                content: `
+                    <h2>Login to Your Bank Account</h2>
+                    <p>Please enter your credentials to verify your identity.</p>
+                    <form>
+                        <input type="text" placeholder="Username" style="display: block; margin-bottom: 10px; padding: 5px;">
+                        <input type="password" placeholder="Password" style="display: block; margin-bottom: 10px; padding: 5px;">
+                        <button style="padding: 5px;">Submit</button>
+                    </form>
+                `,
+                isScam: true
             },
             {
                 type: "Fake Promotions",
-                clues: "Offers free giveaways or deals that sound too good to be true.",
-                explanation: "Scammers use fake promotions to lure victims into providing sensitive information."
+                content: `
+                    <h2>Congratulations! You've Won an iPhone!</h2>
+                    <p>Click the button below to claim your prize.</p>
+                    <button style="padding: 10px; background-color: gold; color: black;">Claim Now</button>
+                `,
+                isScam: true
             },
             {
-                type: "Fraudulent Payment",
-                clues: "Requests payments via unusual methods like gift cards or crypto.",
-                explanation: "Fraudulent payment scams often ask for untraceable payment methods."
+                type: "Malware",
+                content: `
+                    <h2>Urgent: Your Computer is Infected!</h2>
+                    <p>Click the button below to download the antivirus tool.</p>
+                    <button style="padding: 10px; background-color: red; color: white;">Download Now</button>
+                `,
+                isScam: true
+            },
+            {
+                type: "Legitimate",
+                content: `
+                    <h2>Welcome to Our Blog</h2>
+                    <p>Explore our latest posts about technology and design.</p>
+                    <a href="#" style="color: #1877F2;">Read More</a>
+                `,
+                isScam: false
+            },
+            {
+                type: "Legitimate",
+                content: `
+                    <h2>Subscribe to Our Newsletter</h2>
+                    <p>Enter your email to receive updates.</p>
+                    <input type="email" placeholder="Enter your email" style="padding: 5px;">
+                    <button style="padding: 5px;">Subscribe</button>
+                `,
+                isScam: false
             }
         ];
 
-        let currentScam;
+        let currentScenario;
 
-        function randomizeScam() {
-            currentScam = scamTypes[Math.floor(Math.random() * scamTypes.length)];
-            document.getElementById('clues').textContent = currentScam.clues;
+        // Randomly select a scenario
+        function randomizeScenario() {
+            currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
+            document.getElementById('scenario').innerHTML = currentScenario.content;
         }
 
-        function showReportDialog() {
-            document.getElementById('reportDialog').style.display = 'block';
-        }
-
-        function closeReportDialog() {
-            document.getElementById('reportDialog').style.display = 'none';
-        }
-
-        function submitReport() {
-            const userGuess = document.getElementById('reason').value;
-            let message;
-            if (userGuess === currentScam.type) {
-                message = `Correct! This is a ${currentScam.type} scam. ${currentScam.explanation}`;
+        // Handle report button click
+        function reportScenario() {
+            if (currentScenario.isScam) {
+                alert(`Correct! This was a "${currentScenario.type}" scam.`);
             } else {
-                message = `Incorrect. This is a ${currentScam.type} scam. ${currentScam.explanation}`;
+                alert("Incorrect! This was a legitimate interaction.");
             }
-            alert(message);
-            randomizeScam(); // Reset game after report
-            closeReportDialog();
+            randomizeScenario();
         }
 
-        document.addEventListener('DOMContentLoaded', randomizeScam);
+        // Handle interact button click
+        function interactWithScenario() {
+            if (currentScenario.isScam) {
+                alert(`You fell for a "${currentScenario.type}" scam! Be more careful next time.`);
+            } else {
+                alert("This was a legitimate interaction. Well done!");
+            }
+            randomizeScenario();
+        }
+
+        // Initialize the first scenario
+        document.addEventListener('DOMContentLoaded', randomizeScenario);
     </script>
 </body>
 </html>
