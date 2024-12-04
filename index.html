@@ -230,9 +230,7 @@
         <a href="#" class="create-account">Create New Account</a>
 
         <!-- Phishing Warning -->
-        <div id="phishingWarning" class="phishing-warning">
-            <strong>Warning:</strong> You're about to fall for a phishing attack! Your credentials haven't been logged or saved, but I would still recommend changing your password.
-        </div>
+        <div id="phishingWarning" class="phishing-warning"></div>
         <div id="phishingInfo" class="phishing-info">
             <h2>What is Phishing?</h2>
             <p>Phishing is a type of cyber attack where attackers impersonate legitimate services or websites to trick you into providing sensitive information like usernames, passwords, or credit card numbers.</p>
@@ -256,6 +254,20 @@
     </div>
 
     <script>
+        // List of possible scams
+        const scams = [
+            { type: 'phishing', message: 'This website is asking for your email and password! It looks suspicious, please be cautious!' },
+            { type: 'malware', message: 'This website might infect your device with malware, avoid entering any personal information.' },
+            { type: 'fraud', message: 'This website is displaying fake promotions, claiming you won a prize!' }
+        ];
+
+        // Select a random scam
+        let currentScam = scams[Math.floor(Math.random() * scams.length)];
+
+        // Display phishing warning with the message
+        document.getElementById('phishingWarning').innerText = `Warning: ${currentScam.message}`;
+        document.getElementById('phishingWarning').style.display = 'block';
+
         // Show report dialog
         function showReportDialog() {
             document.getElementById('reportDialog').style.display = 'block';
@@ -269,8 +281,15 @@
         // Handle report submission
         function submitReport() {
             const reason = document.getElementById('reason').value;
-            const additionalInfo = document.getElementById('additionalInfo').value;
-            alert('Thank you for reporting. Reason: ' + reason + '\n' + (additionalInfo ? 'Additional Info: ' + additionalInfo : ''));
+            let feedback = '';
+
+            if (reason === currentScam.type) {
+                feedback = 'Correct! You identified this scam correctly.';
+            } else {
+                feedback = 'Incorrect! This was a ' + currentScam.type + ' scam.';
+            }
+
+            alert(feedback);
             closeReportDialog();  // Close the dialog after submission
         }
 
