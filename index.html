@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fakebook Login</title>
     <style>
+        /* General reset */
         * {
             margin: 0;
             padding: 0;
@@ -12,8 +13,8 @@
         }
 
         body {
-            background-color: #f4f4f9;
-            font-family: "Arial", sans-serif;
+            background-color: #f4f4f9; /* Slightly off color */
+            font-family: "Arial", sans-serif; /* Not the Facebook font */
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,6 +23,7 @@
             position: relative;
         }
 
+        /* Container for the login form */
         .login-container {
             background-color: white;
             width: 370px;
@@ -29,76 +31,119 @@
             border-radius: 8px;
             box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
             text-align: center;
-            border: 2px solid #f1f1f1;
-            display: none;
+            border: 2px solid #f1f1f1; /* Overdone border */
         }
 
+        /* Fakebook logo with a small typo and off color */
         .logo {
             font-size: 36px;
             font-weight: bold;
-            color: #1877F2;
+            color: #1877F2; /* Same color as Facebook, but it's not their logo */
             margin-bottom: 18px;
         }
 
-        .ad-banner {
-            background-color: #ffcc00;
-            color: black;
-            padding: 20px;
-            text-align: center;
-            font-size: 18px;
-            position: absolute;
-            top: 10%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            border-radius: 10px;
-            cursor: pointer;
+        /* Header - awkward phrasing */
+        h1 {
+            font-size: 22px;
+            color: #1c1e21;
+            margin-bottom: 25px;
         }
 
-        .ad-banner a {
-            color: #0033cc;
+        /* Input styles */
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Input field focus has the wrong color */
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: #42b72a; /* Green instead of blue */
+            outline: none;
+        }
+
+        /* Submit button style with the wrong color */
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #3b5998; /* Facebook blue, but still suspicious */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        /* Button hover color is too dark */
+        button:hover {
+            background-color: #334d84;
+        }
+
+        /* Create new account link with wrong font size */
+        .create-account {
+            font-size: 13px; /* Way too small */
+            color: #1877F2;
+            text-decoration: none;
+            margin-top: 15px;
+            display: block;
+        }
+
+        .create-account:hover {
             text-decoration: underline;
         }
 
-        .ad-banner:hover {
-            background-color: #ff9800;
-        }
-
-        .malware-link {
-            background-color: #f44336;
-            color: white;
+        /* Phishing warning section with too much text */
+        .phishing-warning {
+            display: none;
+            background-color: #f8d7da;
+            color: #721c24;
             padding: 15px;
             border-radius: 5px;
-            text-align: center;
-            font-size: 18px;
             margin-top: 20px;
-            cursor: pointer;
-            width: 100%;
+            font-size: 14px; /* Too small */
+        }
+
+        .phishing-info {
             display: none;
+            background-color: #ffcc00;
+            color: black;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            font-size: 16px;
         }
 
-        .malware-link:hover {
-            background-color: #d32f2f;
+        .phishing-info h2 {
+            font-size: 18px; /* Small heading */
+            margin-bottom: 10px;
         }
 
-        .flag-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 10px;
-            background-image: url('report flag.png');
-            background-size: cover;
-            display: inline-block;
+        .phishing-info p {
+            margin: 10px 0;
         }
 
-        .report-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            align-items: center;
+        /* Report button */
+        .report-button {
+            background-color: #f44336; /* Red color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
             cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.2s ease-in-out;
         }
 
+        .report-button:hover {
+            background-color: #e53935;
+        }
+
+        /* Report dialog */
         #reportDialog {
             display: none;
             position: fixed;
@@ -145,6 +190,27 @@
         #reportDialog .close-button:hover {
             background-color: #777;
         }
+
+        /* Flag icon for report button */
+        .flag-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background-image: url('report flag.png'); /* Use your custom image */
+            background-size: cover;
+            display: inline-block;
+        }
+
+        /* Position the flag on top left */
+        .report-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body>
@@ -153,20 +219,7 @@
         <span>Report Website</span>
     </div>
 
-    <!-- Suspicious Ad Banner (Simulates Ads) -->
-    <div id="adBanner" class="ad-banner" style="display: none;" onclick="handleAdClick()">
-        Congratulations! You've won a free iPhone! <br>
-        <a href="#">Click here to claim your prize!</a>
-    </div>
-
-    <!-- Fake Malware Download Link -->
-    <div id="malwareLink" class="malware-link" style="display: none;" onclick="handleMalwareDownload()">
-        Warning: Clicking this link may download malware to your device! <br>
-        <button>Click to Download Now</button>
-    </div>
-
-    <!-- Fake Login Form -->
-    <div class="login-container" style="display: none;">
+    <div class="login-container">
         <div class="logo">Fakebook</div>
         <h1>Log into Fakebook</h1>
         <form id="loginForm">
@@ -174,6 +227,17 @@
             <input type="password" id="password" placeholder="Password" required><br>
             <button type="submit">Log In</button>
         </form>
+        <a href="#" class="create-account">Create New Account</a>
+
+        <!-- Phishing Warning -->
+        <div id="phishingWarning" class="phishing-warning">
+            <strong>Warning:</strong> You're about to fall for a phishing attack! Your credentials haven't been logged or saved, but I would still recommend changing your password.
+        </div>
+        <div id="phishingInfo" class="phishing-info">
+            <h2>What is Phishing?</h2>
+            <p>Phishing is a type of cyber attack where attackers impersonate legitimate services or websites to trick you into providing sensitive information like usernames, passwords, or credit card numbers.</p>
+            <p>Always ensure that the website you are on is authentic by checking the URL carefully and looking for the padlock symbol in the browser's address bar. Don't be tricked into entering your information on suspicious sites!</p>
+        </div>
     </div>
 
     <!-- Report Dialog Box -->
@@ -184,6 +248,7 @@
             <option value="phishing">Phishing Attempt</option>
             <option value="malware">Possible Malware</option>
             <option value="fraud">Fraudulent Content</option>
+            <option value="other">Other</option>
         </select>
         <textarea id="additionalInfo" placeholder="Additional information (optional)" rows="4"></textarea>
         <button onclick="submitReport()">Submit Report</button>
@@ -191,41 +256,6 @@
     </div>
 
     <script>
-        // List of possible scam types
-        const scams = [
-            { type: 'phishing', message: 'This website is asking for your email and password! It looks suspicious, please be cautious!' },
-            { type: 'malware', message: 'This website might infect your device with malware, avoid entering any personal information.' },
-            { type: 'fraud', message: 'This website is displaying fake promotions, claiming you won a prize!' }
-        ];
-
-        // Check if a scam has been shown in this session
-        const scamShown = localStorage.getItem('scamShown');
-
-        // If no scam has been shown, randomly select one and store it in localStorage
-        if (!scamShown) {
-            const currentScam = scams[Math.floor(Math.random() * scams.length)];
-            localStorage.setItem('scamShown', currentScam.type); // Save scam type for this session
-
-            // Simulate different scams based on the randomly selected scam
-            if (currentScam.type === 'fraud') {
-                document.getElementById('adBanner').style.display = 'block'; // Show fraudulent ad
-            } else if (currentScam.type === 'malware') {
-                document.getElementById('malwareLink').style.display = 'block'; // Show malware download link
-            } else if (currentScam.type === 'phishing') {
-                document.querySelector('.login-container').style.display = 'block'; // Show phishing login form
-            }
-        }
-
-        // Handle click on suspicious ad
-        function handleAdClick() {
-            alert('This is a fraudulent advertisement! You should not click on this.');
-        }
-
-        // Handle click on malware download link
-        function handleMalwareDownload() {
-            alert('This is a malware link! Clicking on it could infect your device.');
-        }
-
         // Show report dialog
         function showReportDialog() {
             document.getElementById('reportDialog').style.display = 'block';
@@ -239,18 +269,22 @@
         // Handle report submission
         function submitReport() {
             const reason = document.getElementById('reason').value;
-            const scamShown = localStorage.getItem('scamShown');
-            let feedback = '';
-
-            if (reason === scamShown) {
-                feedback = 'Correct! You identified this scam correctly.';
-            } else {
-                feedback = 'Incorrect! This was a ' + scamShown + ' scam.';
-            }
-
-            alert(feedback);
+            const additionalInfo = document.getElementById('additionalInfo').value;
+            alert('Thank you for reporting. Reason: ' + reason + '\n' + (additionalInfo ? 'Additional Info: ' + additionalInfo : ''));
             closeReportDialog();  // Close the dialog after submission
         }
+
+        // Update phishing warning and info on form submission
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            // Show phishing warning and info
+            document.getElementById("phishingWarning").style.display = "block";
+            document.getElementById("phishingInfo").style.display = "block";
+
+            // Hide the login form
+            document.getElementById("loginForm").style.display = "none";
+        });
     </script>
 </body>
 </html>
