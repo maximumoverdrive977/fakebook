@@ -245,20 +245,6 @@
             resetGame();
         }
 
-        function winLegitimate() {
-            alert("You successfully interacted with a legitimate page!");
-            randomizeScenario();
-        }
-
-        function resetGame() {
-            level = 1;
-            correctScams = 0;
-            firstQuestionAnswered = false;
-            document.getElementById('level').innerText = "Level: 1";
-            document.getElementById('score').innerText = "Scams Identified: 0/3";
-            randomizeScenario();
-        }
-
         function showReportOptions() {
             document.getElementById('reportOptions').style.display = 'inline-block';
             document.getElementById('submitReport').style.display = 'inline-block';
@@ -269,6 +255,8 @@
             if (selectedScam === currentScenario.type) {
                 alert("Correct! You identified the scam!");
                 correctScams++;
+                document.getElementById('score').innerText = `Scams Identified: ${correctScams}/3`;
+
                 if (correctScams >= 3) {
                     level++;
                     document.getElementById('level').innerText = `Level: ${level}`;
@@ -283,6 +271,11 @@
         function toggleInsaneMode() {
             isInsaneMode = !isInsaneMode;
             document.body.classList.toggle('insane-mode', isInsaneMode);
+        }
+
+        function winLegitimate() {
+            alert("This was a legitimate site. Good job!");
+            randomizeScenario();
         }
 
         document.addEventListener('DOMContentLoaded', randomizeScenario);
