@@ -295,6 +295,27 @@
             randomizeScenario();
         }
 
+        function showReportOptions() {
+            document.getElementById('reportOptions').style.display = 'inline-block';
+            document.getElementById('submitReport').style.display = 'inline-block';
+        }
+
+        function submitReport() {
+            const selectedScam = document.getElementById('reportOptions').value;
+            if (selectedScam === currentScenario.type) {
+                alert("Correct! You identified the scam!");
+                correctScams++;
+                if (correctScams >= 3) {
+                    level++;
+                    document.getElementById('level').innerText = `Level: ${level}`;
+                    correctScams = 0; // Reset after level up
+                }
+                randomizeScenario();
+            } else {
+                loseGame(selectedScam);
+            }
+        }
+
         function toggleNightmareMode() {
             isNightmareMode = !isNightmareMode;
             document.body.classList.toggle('nightmare-mode', isNightmareMode);
