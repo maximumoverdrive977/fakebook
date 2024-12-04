@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phishing Awareness - Login</title>
+    <title>Fakebook Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #f2f3f5;
             margin: 0;
             padding: 0;
             display: flex;
@@ -20,23 +20,30 @@
             border-radius: 8px;
             padding: 30px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 350px;
             text-align: center;
+        }
+        .logo {
+            font-size: 40px;
+            font-weight: bold;
+            color: #1877F2;
+            margin-bottom: 20px;
         }
         h1 {
             font-size: 24px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            color: #333;
         }
         input[type="text"], input[type="password"] {
             width: 100%;
-            padding: 10px;
-            margin: 10px 0;
+            padding: 12px;
+            margin: 8px 0;
             border: 1px solid #ccc;
             border-radius: 4px;
         }
         button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #4CAF50;
             color: white;
             border: none;
@@ -47,13 +54,13 @@
         button:hover {
             background-color: #45a049;
         }
-        .error-message {
+        .error-message, .phishing-warning {
             color: red;
-            font-size: 18px;
+            font-size: 16px;
             margin-top: 20px;
             display: none;
         }
-        .warning-message {
+        .phishing-info {
             background-color: #ffcc00;
             padding: 15px;
             border-radius: 5px;
@@ -62,20 +69,28 @@
             font-size: 16px;
             display: none;
         }
+        .phishing-info p {
+            margin: 10px 0;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h1>Login</h1>
+        <div class="logo">Fakebook</div>
+        <h1>Log into Fakebook</h1>
         <form id="loginForm">
-            <input type="text" id="username" placeholder="Username" required><br>
+            <input type="text" id="username" placeholder="Email or Phone" required><br>
             <input type="password" id="password" placeholder="Password" required><br>
-            <button type="submit">Login</button>
+            <button type="submit">Log In</button>
         </form>
         <div id="errorMessage" class="error-message">Invalid credentials! Please don't fall for phishing.</div>
-        <div id="warningMessage" class="warning-message">
-            <strong>Warning:</strong> You've just entered your credentials on a suspicious page.
-            <br>It's important to always double-check URLs and ensure that the site is legitimate before entering sensitive information.
+        <div id="phishingWarning" class="phishing-warning">
+            <strong>Warning:</strong> You're about to fall for a phishing attack!
+        </div>
+        <div id="phishingInfo" class="phishing-info">
+            <h2>What is Phishing?</h2>
+            <p>Phishing is a type of cyber attack where an attacker pretends to be a trustworthy entity (such as a website or service) in order to trick you into giving up sensitive information like usernames, passwords, or credit card details.</p>
+            <p>It is important to always verify that the website you are on is legitimate and trustworthy before entering any sensitive information. Look for the padlock icon in the browser's address bar, and check the URL carefully to ensure you are on the correct site.</p>
         </div>
     </div>
 
@@ -83,18 +98,16 @@
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault();
             
-            // Show phishing warning message
-            document.getElementById("warningMessage").style.display = "block";
+            // Show phishing warning and information about phishing
+            document.getElementById("phishingWarning").style.display = "block";
+            document.getElementById("phishingInfo").style.display = "block";
             
             // Hide the login form
             document.getElementById("loginForm").style.display = "none";
-
+            
             // Optionally, you can log the credentials for demonstration purposes (but don't actually do this in a real phishing scenario)
             console.log("Username: " + document.getElementById("username").value);
             console.log("Password: " + document.getElementById("password").value);
-            
-            // You could also show an error message, but we have already shown the warning above
-            // document.getElementById("errorMessage").style.display = "block";
         });
     </script>
 </body>
