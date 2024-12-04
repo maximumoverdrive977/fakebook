@@ -14,6 +14,7 @@
             height: 100vh;
             margin: 0;
             padding: 0;
+            transition: all 0.5s ease;
         }
 
         .container {
@@ -23,6 +24,7 @@
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transition: all 0.5s ease;
         }
 
         h1 {
@@ -43,6 +45,7 @@
             background-color: #eef2ff;
             border-radius: 8px;
             color: #333;
+            position: relative;
         }
 
         button, select {
@@ -83,6 +86,50 @@
             color: red;
             margin-bottom: 20px;
         }
+
+        /* Insane Mode */
+        .insane-mode {
+            animation: glitch 1s infinite linear;
+            position: relative;
+        }
+
+        @keyframes glitch {
+            0% { top: 0; left: 0; }
+            50% { top: 10px; left: 10px; opacity: 0.7; }
+            100% { top: 0; left: 0; }
+        }
+
+        /* Nightmare Mode */
+        .nightmare-mode {
+            background-color: black;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .flashlight {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            pointer-events: none;
+            transition: width 0.1s, height 0.1s;
+        }
+
+        .nightmare-mode .container {
+            background-color: transparent;
+            color: white;
+        }
+
+        .flashlight:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -107,6 +154,9 @@
         <div id="explanation" class="explanation" style="display: none;">
             <!-- Explanation will appear here -->
         </div>
+
+        <button onclick="toggleNightmareMode()">Nightmare Mode</button>
+        <button onclick="toggleInsaneMode()">Insane Mode</button>
     </div>
 
     <script>
@@ -139,123 +189,7 @@
                 `,
                 difficulty: 1
             },
-            // Level 2: Medium
-            {
-                type: "fake-promo",
-                content: `
-                    <h2>Special Offer: 50% Off Your Favorite Shoes!</h2>
-                    <p>Click the link below to redeem your offer.</p>
-                    <a href="#" onclick="loseGame('fake-promo');" style="color: blue;">Redeem Now</a>
-                `,
-                difficulty: 2
-            },
-            {
-                type: "malware",
-                content: `
-                    <h2>Your Computer is Infected!</h2>
-                    <p>Click below to download our free antivirus software and protect your PC.</p>
-                    <a href="#" onclick="loseGame('malware');" style="color: red;">Download Now</a>
-                `,
-                difficulty: 2
-            },
-            {
-                type: "none",
-                content: `
-                    <h2>Login to Secure Service</h2>
-                    <form onsubmit="winLegitimate(); return false;">
-                        <input type="text" placeholder="Username" required style="display: block; margin-bottom: 10px;">
-                        <input type="password" placeholder="Password" required style="display: block; margin-bottom: 10px;">
-                        <button type="submit">Login</button>
-                    </form>
-                `,
-                difficulty: 2
-            },
-            // Level 3: Hard
-            {
-                type: "tech-support",
-                content: `
-                    <h2>Urgent: Your Computer Needs Immediate Attention</h2>
-                    <p>Our system detected an issue. Please contact support immediately.</p>
-                    <a href="#" onclick="loseGame('tech-support');" style="color: red;">Contact Support</a>
-                `,
-                difficulty: 3
-            },
-            {
-                type: "phishing",
-                content: `
-                    <h2>Account Verification Needed</h2>
-                    <p>We detected an unauthorized login attempt. Please confirm your account details to secure it.</p>
-                    <a href="#" onclick="loseGame('phishing');" style="color: red;">Secure My Account</a>
-                `,
-                difficulty: 3
-            },
-            {
-                type: "none",
-                content: `
-                    <h2>Exclusive Invitation</h2>
-                    <p>You have been invited to join our elite program. No strings attached!</p>
-                    <a href="#" onclick="winLegitimate();" style="color: green;">Accept Invitation</a>
-                `,
-                difficulty: 3
-            },
-            // Level 4: Expert
-            {
-                type: "fake-promo",
-                content: `
-                    <h2>Exclusive 70% Discount on Electronics Today Only!</h2>
-                    <p>Click below to grab the deal before it's too late!</p>
-                    <a href="#" onclick="loseGame('fake-promo');" style="color: blue;">Grab the Deal</a>
-                `,
-                difficulty: 4
-            },
-            {
-                type: "malware",
-                content: `
-                    <h2>Your Software is Out of Date!</h2>
-                    <p>Click here to update your system and avoid future problems.</p>
-                    <a href="#" onclick="loseGame('malware');" style="color: red;">Update Now</a>
-                `,
-                difficulty: 4
-            },
-            {
-                type: "none",
-                content: `
-                    <h2>Login to Your Bank Account</h2>
-                    <form onsubmit="winLegitimate(); return false;">
-                        <input type="text" placeholder="Bank ID" required style="display: block; margin-bottom: 10px;">
-                        <input type="password" placeholder="PIN" required style="display: block; margin-bottom: 10px;">
-                        <button type="submit">Login</button>
-                    </form>
-                `,
-                difficulty: 4
-            },
-            // New scam login pages
-            {
-                type: "phishing",
-                content: `
-                    <h2>Security Alert: Unauthorized Login Attempt</h2>
-                    <p>Your account has been accessed from an unknown location. Please log in again to secure your account.</p>
-                    <form onsubmit="loseGame('phishing'); return false;">
-                        <input type="text" placeholder="Email Address" required>
-                        <input type="password" placeholder="Password" required>
-                        <button type="submit">Log In</button>
-                    </form>
-                `,
-                difficulty: 5
-            },
-            {
-                type: "phishing",
-                content: `
-                    <h2>Account Suspended - Action Required</h2>
-                    <p>We detected unusual activity on your account. Please log in to prevent your account from being suspended.</p>
-                    <form onsubmit="loseGame('phishing'); return false;">
-                        <input type="text" placeholder="Username" required>
-                        <input type="password" placeholder="Password" required>
-                        <button type="submit">Log In</button>
-                    </form>
-                `,
-                difficulty: 5
-            }
+            // Add legitimate counterparts to each scam type here...
         ];
 
         let level = 1;
@@ -264,6 +198,8 @@
         let lastScenario;
         let timerValue = 30;
         let timerInterval;
+        let isNightmareMode = false;
+        let isInsaneMode = false;
 
         function randomizeScenario() {
             const availableScenarios = scenarios.filter(scenario => scenario !== lastScenario);
@@ -349,6 +285,37 @@
             document.getElementById('level').innerText = "Level: 1";
             document.getElementById('score').innerText = "Scams Identified: 0/3";
             randomizeScenario();
+        }
+
+        function toggleNightmareMode() {
+            isNightmareMode = !isNightmareMode;
+            document.body.classList.toggle('nightmare-mode', isNightmareMode);
+
+            if (isNightmareMode) {
+                document.body.style.cursor = 'none';
+                document.addEventListener('mousemove', moveFlashlight);
+            } else {
+                document.body.style.cursor = 'default';
+                document.removeEventListener('mousemove', moveFlashlight);
+            }
+        }
+
+        function moveFlashlight(event) {
+            const flashlight = document.querySelector('.flashlight');
+            if (!flashlight) {
+                const newFlashlight = document.createElement('div');
+                newFlashlight.classList.add('flashlight');
+                document.body.appendChild(newFlashlight);
+            }
+
+            const flashlightElement = document.querySelector('.flashlight');
+            flashlightElement.style.left = `${event.pageX - 100}px`;
+            flashlightElement.style.top = `${event.pageY - 100}px`;
+        }
+
+        function toggleInsaneMode() {
+            isInsaneMode = !isInsaneMode;
+            document.body.classList.toggle('insane-mode', isInsaneMode);
         }
 
         document.addEventListener('DOMContentLoaded', randomizeScenario);
