@@ -92,7 +92,6 @@
             <option value="phishing">Phishing</option>
             <option value="fake-promo">Fake Promotion</option>
             <option value="malware">Malware</option>
-            <option value="none">Not a Scam</option>
         </select>
         <button id="submitReport" style="display: none;" onclick="submitReport()">Submit Report</button>
         <div id="explanation" class="explanation" style="display: none;">
@@ -115,9 +114,9 @@
             {
                 type: "none",
                 content: `
-                    <h2>Welcome to Our Recipe Blog</h2>
+                    <h2>Legitimate Recipe Blog</h2>
                     <p>Explore delicious recipes and tips for cooking!</p>
-                    <a href="#" style="color: #1877F2;">Read More</a>
+                    <a href="#" onclick="winLegitimate();" style="color: #1877F2;">Read More</a>
                 `,
                 difficulty: 1
             },
@@ -132,22 +131,13 @@
                 difficulty: 2
             },
             {
-                type: "malware",
-                content: `
-                    <h2>Important Security Update!</h2>
-                    <p>Your device is at risk. Download the patch now.</p>
-                    <button onclick="loseGame('malware');" style="padding: 10px; background-color: red; color: white;">Download</button>
-                `,
-                difficulty: 2
-            },
-            {
                 type: "none",
                 content: `
-                    <h2>Join Our Webinar</h2>
-                    <p>Sign up for our free webinar on cybersecurity best practices.</p>
-                    <form>
-                        <input type="text" placeholder="Enter your name" style="margin-bottom: 10px; padding: 5px;">
-                        <button style="padding: 5px;">Register</button>
+                    <h2>Login to Secure Service</h2>
+                    <form onsubmit="winLegitimate(); return false;">
+                        <input type="text" placeholder="Username" required style="display: block; margin-bottom: 10px;">
+                        <input type="password" placeholder="Password" required style="display: block; margin-bottom: 10px;">
+                        <button type="submit">Login</button>
                     </form>
                 `,
                 difficulty: 2
@@ -167,7 +157,7 @@
                 content: `
                     <h2>Exclusive Invitation</h2>
                     <p>You have been invited to join our elite program. No strings attached!</p>
-                    <a href="#" style="color: green;">Accept Invitation</a>
+                    <a href="#" onclick="winLegitimate();" style="color: green;">Accept Invitation</a>
                 `,
                 difficulty: 3
             }
@@ -203,9 +193,17 @@
                 }
                 document.getElementById('level').innerText = `Level: ${level}`;
                 document.getElementById('score').innerText = `Scams Identified: ${correctScams}/3`;
+            } else if (currentScenario.type === "none") {
+                alert("This wasn't a scam. You lose!");
+                resetGame();
             } else {
                 alert("Incorrect. Be careful!");
             }
+            randomizeScenario();
+        }
+
+        function winLegitimate() {
+            alert("You successfully interacted with a legitimate page!");
             randomizeScenario();
         }
 
@@ -218,6 +216,14 @@
             alert("You fell for the scam!");
             document.getElementById('explanation').innerHTML = explanations[scamType] || "Be careful next time!";
             document.getElementById('explanation').style.display = 'block';
+        }
+
+        function resetGame() {
+            level = 1;
+            correctScams = 0;
+            document.getElementById('level').innerText = "Level: 1";
+            document.getElementById('score').innerText = "Scams Identified: 0/3";
+            randomizeScenario();
         }
 
         document.addEventListener('DOMContentLoaded', randomizeScenario);
