@@ -39,19 +39,36 @@
             color: #333;
         }
 
-        button {
+        button, select {
             padding: 10px 15px;
             font-size: 16px;
-            background-color: #3b5998;
-            color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.2s;
         }
 
+        button {
+            background-color: #3b5998;
+            color: white;
+        }
+
         button:hover {
             background-color: #334d84;
+        }
+
+        select {
+            margin-top: 10px;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        .explanation {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #ffcccc;
+            border-radius: 8px;
+            color: #b00;
         }
     </style>
 </head>
@@ -61,94 +78,114 @@
         <div id="scenario" class="scenario">
             <!-- Random scenario will be inserted here -->
         </div>
-        <button id="reportButton" onclick="reportScenario()">Report This</button>
-        <button id="interactButton" onclick="interactWithScenario()">Interact</button>
+        <button id="reportButton" onclick="showReportOptions()">Report This</button>
+        <select id="reportOptions" style="display: none;">
+            <option value="">Select Scam Type</option>
+            <option value="phishing">Phishing</option>
+            <option value="fake-promo">Fake Promotion</option>
+            <option value="malware">Malware</option>
+            <option value="none">Not a Scam</option>
+        </select>
+        <button id="submitReport" style="display: none;" onclick="submitReport()">Submit Report</button>
+        <div id="explanation" class="explanation" style="display: none;">
+            <!-- Explanation will appear here -->
+        </div>
     </div>
 
     <script>
         // Scam and legitimate scenarios
         const scenarios = [
             {
-                type: "Phishing",
+                type: "phishing",
                 content: `
                     <h2>Login to Your Bank Account</h2>
                     <p>Please enter your credentials to verify your identity.</p>
-                    <form>
+                    <form onsubmit="loseGame('phishing'); return false;">
                         <input type="text" placeholder="Username" style="display: block; margin-bottom: 10px; padding: 5px;">
                         <input type="password" placeholder="Password" style="display: block; margin-bottom: 10px; padding: 5px;">
                         <button style="padding: 5px;">Submit</button>
                     </form>
-                `,
-                isScam: true
+                `
             },
             {
-                type: "Fake Promotions",
+                type: "fake-promo",
                 content: `
                     <h2>Congratulations! You've Won an iPhone!</h2>
                     <p>Click the button below to claim your prize.</p>
-                    <button style="padding: 10px; background-color: gold; color: black;">Claim Now</button>
-                `,
-                isScam: true
+                    <button onclick="loseGame('fake-promo');" style="padding: 10px; background-color: gold; color: black;">Claim Now</button>
+                `
             },
             {
-                type: "Malware",
+                type: "malware",
                 content: `
                     <h2>Urgent: Your Computer is Infected!</h2>
                     <p>Click the button below to download the antivirus tool.</p>
-                    <button style="padding: 10px; background-color: red; color: white;">Download Now</button>
-                `,
-                isScam: true
+                    <button onclick="loseGame('malware');" style="padding: 10px; background-color: red; color: white;">Download Now</button>
+                `
             },
             {
-                type: "Legitimate",
+                type: "none",
                 content: `
                     <h2>Welcome to Our Blog</h2>
                     <p>Explore our latest posts about technology and design.</p>
                     <a href="#" style="color: #1877F2;">Read More</a>
-                `,
-                isScam: false
+                `
             },
             {
-                type: "Legitimate",
+                type: "none",
                 content: `
                     <h2>Subscribe to Our Newsletter</h2>
                     <p>Enter your email to receive updates.</p>
-                    <input type="email" placeholder="Enter your email" style="padding: 5px;">
-                    <button style="padding: 5px;">Subscribe</button>
-                `,
-                isScam: false
+                    <form>
+                        <input type="email" placeholder="Enter your email" style="padding: 5px;">
+                        <button style="padding: 5px;">Subscribe</button>
+                    </form>
+                `
             }
         ];
 
         let currentScenario;
 
-        // Randomly select a scenario
+        // Randomize scenario
         function randomizeScenario() {
             currentScenario = scenarios[Math.floor(Math.random() * scenarios.length)];
             document.getElementById('scenario').innerHTML = currentScenario.content;
+            document.getElementById('reportOptions').style.display = 'none';
+            document.getElementById('submitReport').style.display = 'none';
+            document.getElementById('explanation').style.display = 'none';
         }
 
-        // Handle report button click
-        function reportScenario() {
-            if (currentScenario.isScam) {
-                alert(`Correct! This was a "${currentScenario.type}" scam.`);
+        // Show report options
+        function showReportOptions() {
+            document.getElementById('reportOptions').style.display = 'block';
+            document.getElementById('submitReport').style.display = 'block';
+        }
+
+        // Submit report
+        function submitReport() {
+            const selectedOption = document.getElementById('reportOptions').value;
+            if (selectedOption === currentScenario.type) {
+                alert("Correct! You identified the scam.");
             } else {
-                alert("Incorrect! This was a legitimate interaction.");
+                alert("Incorrect. Try again.");
             }
             randomizeScenario();
         }
 
-        // Handle interact button click
-        function interactWithScenario() {
-            if (currentScenario.isScam) {
-                alert(`You fell for a "${currentScenario.type}" scam! Be more careful next time.`);
-            } else {
-                alert("This was a legitimate interaction. Well done!");
-            }
-            randomizeScenario();
+        // Lose the game
+        function loseGame(scamType) {
+            const explanation = {
+                phishing: "This was a phishing scam. Never enter your credentials on suspicious pages. Always check the URL and ensure it's secure.",
+                "fake-promo": "This was a fake promotion scam. Be wary of offers that seem too good to be true, especially if they ask for personal information.",
+                malware: "This was a malware scam. Avoid clicking on suspicious download links or buttons. Use trusted antivirus software.",
+            };
+
+            alert("You fell for the scam!");
+            document.getElementById('explanation').innerHTML = explanation[scamType] || "Be careful next time!";
+            document.getElementById('explanation').style.display = 'block';
         }
 
-        // Initialize the first scenario
+        // Initialize game
         document.addEventListener('DOMContentLoaded', randomizeScenario);
     </script>
 </body>
