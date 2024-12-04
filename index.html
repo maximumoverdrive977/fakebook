@@ -125,24 +125,69 @@
             margin: 10px 0;
         }
 
-        /* Live count section */
-        .live-count {
-            font-size: 12px;
-            color: #333;
+        /* Report button */
+        .report-button {
+            background-color: #f44336; /* Red color */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
             margin-top: 20px;
-            font-weight: bold;
-        }
-        
-        /* Defective link */
-        .defective-link {
-            color: red;
-            font-size: 14px;
-            margin-top: 20px;
-            text-decoration: none;
+            transition: background-color 0.2s ease-in-out;
         }
 
-        .defective-link:hover {
-            text-decoration: underline;
+        .report-button:hover {
+            background-color: #e53935;
+        }
+
+        /* Report dialog */
+        #reportDialog {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+
+        #reportDialog select, #reportDialog textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        #reportDialog button {
+            background-color: #42b72a;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            border: none;
+        }
+
+        #reportDialog button:hover {
+            background-color: #36a420;
+        }
+
+        #reportDialog .close-button {
+            background-color: #999;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        #reportDialog .close-button:hover {
+            background-color: #777;
         }
 
     </style>
@@ -158,8 +203,8 @@
         </form>
         <a href="#" class="create-account">Create New Account</a>
 
-        <!-- Minor broken link for additional effect -->
-        <a href="http://fakbook.com" class="defective-link">Help us fix this error by clicking here!</a>
+        <!-- Report Website Button -->
+        <button class="report-button" onclick="showReportDialog()">Report Website</button>
 
         <div id="phishingWarning" class="phishing-warning">
             <strong>Warning:</strong> You're about to fall for a phishing attack!
@@ -169,42 +214,51 @@
             <p>Phishing is a type of cyber attack where attackers impersonate legitimate services or websites to trick you into providing sensitive information like usernames, passwords, or credit card numbers.</p>
             <p>Always ensure that the website you are on is authentic by checking the URL carefully and looking for the padlock symbol in the browser's address bar. Don't be tricked into entering your information on suspicious sites!</p>
         </div>
+    </div>
 
-        <!-- Fake live count section -->
-        <div id="liveCount" class="live-count"></div>
+    <!-- Report Dialog Box -->
+    <div id="reportDialog">
+        <h3>Report Website</h3>
+        <label for="reason">Why are you reporting this website?</label>
+        <select id="reason" required>
+            <option value="phishing">Phishing Attempt</option>
+            <option value="malware">Possible Malware</option>
+            <option value="fraud">Fraudulent Content</option>
+            <option value="other">Other</option>
+        </select>
+        <textarea id="additionalInfo" placeholder="Additional information (optional)" rows="4"></textarea>
+        <button onclick="submitReport()">Submit Report</button>
+        <button class="close-button" onclick="closeReportDialog()">Close</button>
     </div>
 
     <script>
-        // Function to update the live count (simulated)
-        function updateLiveCount() {
-            let count = localStorage.getItem("phishingCount");
-            count = count ? parseInt(count) : 0;
-            document.getElementById("liveCount").innerHTML = `Live Count: ${count} people have entered their credentials.`;
+        // Show report dialog
+        function showReportDialog() {
+            document.getElementById('reportDialog').style.display = 'block';
         }
 
-        // Update the count when the form is submitted
+        // Close report dialog
+        function closeReportDialog() {
+            document.getElementById('reportDialog').style.display = 'none';
+        }
+
+        // Handle report submission
+        function submitReport() {
+            const reason = document.getElementById('reason').value;
+            const additionalInfo = document.getElementById('additionalInfo').value;
+            alert('Thank you for reporting. Reason: ' + reason + '\n' + (additionalInfo ? 'Additional Info: ' + additionalInfo : ''));
+            closeReportDialog();  // Close the dialog after submission
+        }
+
+        // Update phishing warning and info on form submission
         document.getElementById("loginForm").addEventListener("submit", function(event) {
             event.preventDefault();
             
-            // Increment the count in localStorage
-            let count = localStorage.getItem("phishingCount");
-            count = count ? parseInt(count) : 0;
-            count++;
-            localStorage.setItem("phishingCount", count);
-
             // Show phishing warning and info
             document.getElementById("phishingWarning").style.display = "block";
             document.getElementById("phishingInfo").style.display = "block";
 
             // Hide the login form
             document.getElementById("loginForm").style.display = "none";
-            
-            // Update the live count on the page
-            updateLiveCount();
         });
-
-        // Initialize live count on page load
-        window.onload = updateLiveCount;
-    </script>
-</body>
-</html>
+   
