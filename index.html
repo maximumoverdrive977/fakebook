@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fakebook Login</title>
     <style>
-        /* General reset */
         * {
             margin: 0;
             padding: 0;
@@ -21,10 +20,8 @@
             height: 100vh;
             color: #2c2f33;
             position: relative;
-            overflow: hidden;
         }
 
-        /* Container for the login form */
         .login-container {
             background-color: white;
             width: 370px;
@@ -36,7 +33,6 @@
             display: none;
         }
 
-        /* Fakebook logo with a small typo and off color */
         .logo {
             font-size: 36px;
             font-weight: bold;
@@ -44,7 +40,6 @@
             margin-bottom: 18px;
         }
 
-        /* Suspicious Ad banner */
         .ad-banner {
             background-color: #ffcc00;
             color: black;
@@ -69,7 +64,6 @@
             background-color: #ff9800;
         }
 
-        /* Malware download link */
         .malware-link {
             background-color: #f44336;
             color: white;
@@ -87,7 +81,6 @@
             background-color: #d32f2f;
         }
 
-        /* Flag icon for report button */
         .flag-icon {
             width: 24px;
             height: 24px;
@@ -97,7 +90,6 @@
             display: inline-block;
         }
 
-        /* Position the flag on top left */
         .report-container {
             position: absolute;
             top: 20px;
@@ -107,7 +99,6 @@
             cursor: pointer;
         }
 
-        /* Report dialog box */
         #reportDialog {
             display: none;
             position: fixed;
@@ -163,19 +154,19 @@
     </div>
 
     <!-- Suspicious Ad Banner (Simulates Ads) -->
-    <div id="adBanner" class="ad-banner" onclick="handleAdClick()">
+    <div id="adBanner" class="ad-banner" style="display: none;" onclick="handleAdClick()">
         Congratulations! You've won a free iPhone! <br>
         <a href="#">Click here to claim your prize!</a>
     </div>
 
     <!-- Fake Malware Download Link -->
-    <div id="malwareLink" class="malware-link" onclick="handleMalwareDownload()">
+    <div id="malwareLink" class="malware-link" style="display: none;" onclick="handleMalwareDownload()">
         Warning: Clicking this link may download malware to your device! <br>
         <button>Click to Download Now</button>
     </div>
 
     <!-- Fake Login Form -->
-    <div class="login-container">
+    <div class="login-container" style="display: none;">
         <div class="logo">Fakebook</div>
         <h1>Log into Fakebook</h1>
         <form id="loginForm">
@@ -217,14 +208,11 @@
 
             // Simulate different scams based on the randomly selected scam
             if (currentScam.type === 'fraud') {
-                // Show suspicious ad
-                document.getElementById('adBanner').style.display = 'block';
+                document.getElementById('adBanner').style.display = 'block'; // Show fraudulent ad
             } else if (currentScam.type === 'malware') {
-                // Show malware download link
-                document.getElementById('malwareLink').style.display = 'block';
+                document.getElementById('malwareLink').style.display = 'block'; // Show malware download link
             } else if (currentScam.type === 'phishing') {
-                // Show fake login form
-                document.querySelector('.login-container').style.display = 'block';
+                document.querySelector('.login-container').style.display = 'block'; // Show phishing login form
             }
         }
 
