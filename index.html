@@ -74,11 +74,6 @@
             color: white;
         }
 
-        #insaneModeButton {
-            background-color: #ff5722;
-            color: white;
-        }
-
         /* Glitch effect for Insane Mode */
         body.insane-mode {
             animation: glitch 0.3s infinite;
@@ -102,8 +97,8 @@
         <button id="reportButton" onclick="showReportOptions()">Report This</button>
         <select id="reportOptions" style="display: none;">
             <option value="">Select Scam Type</option>
-            <!-- Base scam options -->
-            <option value="phishing">Phishing</option>
+            <option value="phishing-login">Phishing Login</option>
+            <option value="legit-login">Legitimate Login</option>
             <option value="fake-promo">Fake Promotion</option>
             <option value="malware">Malware</option>
             <option value="tech-support">Tech Support Scam</option>
@@ -111,53 +106,70 @@
         </select>
         <button id="submitReport" style="display: none;" onclick="submitReport()">Submit Report</button>
         <div id="explanation" class="explanation" style="display: none;"></div>
-        <div class="difficulty-buttons">
-            <button id="insaneModeButton" onclick="toggleInsaneMode()">Insane Mode</button>
-        </div>
     </div>
 
     <script>
-        /* Game logic remains unchanged */
+        /* Game logic */
         const scenarios = [
-            // Examples of expanded scams
+            // Phishing login
             {
-                type: "phishing",
-                content: `<h2>Email Alert</h2><p>Your account was accessed from a new location. <a href="#" onclick="loseGame('phishing');">Verify Now</a></p>`,
+                type: "phishing-login",
+                content: `<h2>Login to Your Account</h2><p>Your session expired. Please <a href="#" onclick="loseGame('phishing-login');">log in again</a>.</p>`,
                 difficulty: 1,
             },
+            // Legitimate login
             {
-                type: "none",
-                content: `<h2>Official News</h2><p>Read the latest updates from our verified platform. <a href="#" onclick="winLegitimate();">Read More</a></p>`,
+                type: "legit-login",
+                content: `<h2>Secure Login</h2><p>Please log in to continue to your secure account. <a href="#" onclick="winLegitimate();">Log In</a></p>`,
                 difficulty: 1,
             },
+            // Other scenarios
             {
                 type: "fake-promo",
                 content: `<h2>Limited Time Offer</h2><p>Claim your free vacation now! <a href="#" onclick="loseGame('fake-promo');">Claim Here</a></p>`,
                 difficulty: 1,
+            },
+            {
+                type: "malware",
+                content: `<h2>Warning!</h2><p>Your device is infected. <a href="#" onclick="loseGame('malware');">Fix Now</a></p>`,
+                difficulty: 1,
+            },
+            {
+                type: "tech-support",
+                content: `<h2>Critical Error</h2><p>Call our support at 1-800-SCAMMER now! <a href="#" onclick="loseGame('tech-support');">More Info</a></p>`,
+                difficulty: 2,
             },
         ];
 
         let level = 1;
         let correctScams = 0;
         let currentScenario;
-        let lastScenario;
+        let lastThreeScenarios = [];
         let timerValue = 30;
         let timerInterval;
 
         function randomizeScenario() {
             const availableScenarios = scenarios.filter(
-                (scenario) => scenario !== lastScenario && scenario.difficulty <= level
+                (scenario) => !lastThreeScenarios.includes(scenario) && scenario.difficulty <= level
             );
+
+            if (availableScenarios.length === 0) {
+                lastThreeScenarios = [];
+                randomizeScenario();
+                return;
+            }
+
             currentScenario =
                 availableScenarios[Math.floor(Math.random() * availableScenarios.length)];
-            lastScenario = currentScenario;
+            lastThreeScenarios.push(currentScenario);
+            if (lastThreeScenarios.length > 3) lastThreeScenarios.shift();
 
             document.getElementById("scenario").innerHTML = currentScenario.content;
             document.getElementById("reportOptions").style.display = "none";
             document.getElementById("submitReport").style.display = "none";
             document.getElementById("explanation").style.display = "none";
 
-            if (currentScenario.content.includes("form")) {
+            if (currentScenario.type.includes("login")) {
                 document.getElementById("timer").style.display = "none";
             } else {
                 document.getElementById("timer").style.display = "block";
@@ -212,10 +224,6 @@
         function winLegitimate() {
             alert("This was a legitimate site. Well done!");
             randomizeScenario();
-        }
-
-        function toggleInsaneMode() {
-            document.body.classList.toggle("insane-mode");
         }
 
         document.addEventListener("DOMContentLoaded", randomizeScenario);
