@@ -43,12 +43,18 @@
             line-height: 1.5;
         }
 
-        #reportOptions {
-            margin-top: 10px;
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .difficulty-buttons {
-            margin-top: 20px;
+        input[type="text"], input[type="password"] {
+            margin: 5px 0;
+            padding: 8px;
+            width: 80%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
         button {
@@ -73,18 +79,6 @@
             background-color: #4CAF50;
             color: white;
         }
-
-        /* Glitch effect for Insane Mode */
-        body.insane-mode {
-            animation: glitch 0.3s infinite;
-        }
-
-        @keyframes glitch {
-            0% { transform: translate(0, 0); }
-            33% { transform: translate(-2px, 2px); }
-            66% { transform: translate(2px, -2px); }
-            100% { transform: translate(0, 0); }
-        }
     </style>
 </head>
 <body>
@@ -98,11 +92,13 @@
         <select id="reportOptions" style="display: none;">
             <option value="">Select Scam Type</option>
             <option value="phishing-login">Phishing Login</option>
-            <option value="legit-login">Legitimate Login</option>
             <option value="fake-promo">Fake Promotion</option>
             <option value="malware">Malware</option>
             <option value="tech-support">Tech Support Scam</option>
             <option value="fake-survey">Fake Survey</option>
+            <option value="investment-scam">Investment Scam</option>
+            <option value="romance-scam">Romance Scam</option>
+            <option value="charity-scam">Charity Scam</option>
         </select>
         <button id="submitReport" style="display: none;" onclick="submitReport()">Submit Report</button>
         <div id="explanation" class="explanation" style="display: none;"></div>
@@ -111,19 +107,29 @@
     <script>
         /* Game logic */
         const scenarios = [
-            // Phishing login
+            // Phishing login form
             {
                 type: "phishing-login",
-                content: `<h2>Login to Your Account</h2><p>Your session expired. Please <a href="#" onclick="loseGame('phishing-login');">log in again</a>.</p>`,
+                content: `<h2>Login to Your Account</h2>
+                <form onsubmit="loseGame('phishing-login'); return false;">
+                    <input type="text" placeholder="Username">
+                    <input type="password" placeholder="Password">
+                    <button type="submit">Login</button>
+                </form>`,
                 difficulty: 1,
             },
-            // Legitimate login
+            // Legitimate login form
             {
                 type: "legit-login",
-                content: `<h2>Secure Login</h2><p>Please log in to continue to your secure account. <a href="#" onclick="winLegitimate();">Log In</a></p>`,
+                content: `<h2>Secure Login</h2>
+                <form onsubmit="winLegitimate(); return false;">
+                    <input type="text" placeholder="Username">
+                    <input type="password" placeholder="Password">
+                    <button type="submit">Login</button>
+                </form>`,
                 difficulty: 1,
             },
-            // Other scenarios
+            // Fake promotions
             {
                 type: "fake-promo",
                 content: `<h2>Limited Time Offer</h2><p>Claim your free vacation now! <a href="#" onclick="loseGame('fake-promo');">Claim Here</a></p>`,
@@ -138,6 +144,22 @@
                 type: "tech-support",
                 content: `<h2>Critical Error</h2><p>Call our support at 1-800-SCAMMER now! <a href="#" onclick="loseGame('tech-support');">More Info</a></p>`,
                 difficulty: 2,
+            },
+            // New scams
+            {
+                type: "investment-scam",
+                content: `<h2>Investment Opportunity</h2><p>Invest $100 now to make $10,000 overnight! <a href="#" onclick="loseGame('investment-scam');">Invest Now</a></p>`,
+                difficulty: 2,
+            },
+            {
+                type: "romance-scam",
+                content: `<h2>Love Match</h2><p>Chat with your perfect match. <a href="#" onclick="loseGame('romance-scam');">Start Chat</a></p>`,
+                difficulty: 2,
+            },
+            {
+                type: "charity-scam",
+                content: `<h2>Help Save Lives</h2><p>Donate to this urgent cause. <a href="#" onclick="loseGame('charity-scam');">Donate Now</a></p>`,
+                difficulty: 3,
             },
         ];
 
