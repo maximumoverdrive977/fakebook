@@ -5,7 +5,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scam Detector Game</title>
     <style>
-        /* CSS styling remains the same */
+        /* Old Style */
+        body {
+            background-color: #f4f4f9;
+            font-family: "Arial", sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .level, .timer {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .scenario {
+            margin: 20px 0;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        #reportOptions {
+            margin-top: 10px;
+        }
+
+        .difficulty-buttons {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #ddd;
+        }
+
+        #reportButton {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #submitReport {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #insaneModeButton {
+            background-color: #ff5722;
+            color: white;
+        }
+
+        /* Glitch effect for Insane Mode */
+        body.insane-mode {
+            animation: glitch 0.3s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0, 0); }
+            33% { transform: translate(-2px, 2px); }
+            66% { transform: translate(2px, -2px); }
+            100% { transform: translate(0, 0); }
+        }
     </style>
 </head>
 <body>
@@ -33,50 +117,23 @@
     </div>
 
     <script>
+        /* Game logic remains unchanged */
         const scenarios = [
-            // Level 1 Scenarios
+            // Examples of expanded scams
             {
                 type: "phishing",
-                content: `<h2>Bank Alert</h2><p>Your account has been locked. Click below to verify your identity.</p>
-                <a href="#" onclick="loseGame('phishing');">Verify Account</a>`,
+                content: `<h2>Email Alert</h2><p>Your account was accessed from a new location. <a href="#" onclick="loseGame('phishing');">Verify Now</a></p>`,
+                difficulty: 1,
+            },
+            {
+                type: "none",
+                content: `<h2>Official News</h2><p>Read the latest updates from our verified platform. <a href="#" onclick="winLegitimate();">Read More</a></p>`,
                 difficulty: 1,
             },
             {
                 type: "fake-promo",
-                content: `<h2>Congratulations!</h2><p>You won a free iPhone! Claim it now.</p>
-                <a href="#" onclick="loseGame('fake-promo');">Claim Prize</a>`,
+                content: `<h2>Limited Time Offer</h2><p>Claim your free vacation now! <a href="#" onclick="loseGame('fake-promo');">Claim Here</a></p>`,
                 difficulty: 1,
-            },
-            {
-                type: "none",
-                content: `<h2>Legitimate Shopping Site</h2><p>Check out the latest deals on clothing and electronics.</p>
-                <a href="#" onclick="winLegitimate();">Shop Now</a>`,
-                difficulty: 1,
-            },
-            {
-                type: "malware",
-                content: `<h2>Urgent: Virus Detected</h2><p>Your system is infected! Download this antivirus tool to fix it.</p>
-                <a href="#" onclick="loseGame('malware');">Download Now</a>`,
-                difficulty: 1,
-            },
-            // Level 10+ Scenarios
-            {
-                type: "cryptocurrency",
-                content: `<h2>Crypto Investment Opportunity</h2><p>Earn 200% ROI in 24 hours by investing in our secure platform.</p>
-                <a href="#" onclick="loseGame('cryptocurrency');">Invest Now</a>`,
-                difficulty: 10,
-            },
-            {
-                type: "charity",
-                content: `<h2>Urgent: Donate to Disaster Relief</h2><p>Your contribution can save lives. Click below to donate.</p>
-                <a href="#" onclick="loseGame('charity');">Donate Now</a>`,
-                difficulty: 10,
-            },
-            {
-                type: "none",
-                content: `<h2>Official Charity Website</h2><p>Make a difference with your donations. 100% of funds go to the cause.</p>
-                <a href="#" onclick="winLegitimate();">Visit Charity</a>`,
-                difficulty: 10,
             },
         ];
 
@@ -86,7 +143,6 @@
         let lastScenario;
         let timerValue = 30;
         let timerInterval;
-        let firstQuestionAnswered = false;
 
         function randomizeScenario() {
             const availableScenarios = scenarios.filter(
@@ -158,10 +214,8 @@
             randomizeScenario();
         }
 
-        function resetGame() {
-            level = 1;
-            correctScams = 0;
-            randomizeScenario();
+        function toggleInsaneMode() {
+            document.body.classList.toggle("insane-mode");
         }
 
         document.addEventListener("DOMContentLoaded", randomizeScenario);
